@@ -5,13 +5,17 @@
 $ApiToken = "e48d0ed9cc62a5b6e173765ece28e828c63842ff"
 $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/01GWH0MKT4KZ7GMJAVD0YS9KKX"
 
+# $ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
+# $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/01H0HRRZE6KWCK4JGYMWG7KX49"
+
+
 # Endpoint à interroger
 $Endpoint_p1 = "groups"
 $Endpoint_p2 = "CHAPTER_STATIC"
 
 
 # Nombre d'éléments par page
-$ItemsPerPage = 1
+$ItemsPerPage = 100
 
 # ==========================================
 # En-têtes HTTP
@@ -116,6 +120,6 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 # Export JSON
 # ==========================================
 
-$Results |
-    ConvertTo-Json -Depth 20 |
-    Out-File "D:\200 - Développement info\API\$Endpoint.json" -Encoding UTF8
+# $Results |
+#     ConvertTo-Json -Depth 20 |
+#     Out-File "D:\200 - Développement info\API\$Endpoint.json" -Encoding UTF8

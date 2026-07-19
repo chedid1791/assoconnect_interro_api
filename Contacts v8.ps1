@@ -2,10 +2,10 @@
 # Configuration
 # ==========================================
 
-$ApiToken = "e48d0ed9cc62a5b6e173765ece28e828c63842ff"
-$Organisation = "01GWH0MKT4KZ7GMJAVD0YS9KKX"
-# $ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
-# $Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
+# $ApiToken = "e48d0ed9cc62a5b6e173765ece28e828c63842ff"
+# $Organisation = "01GWH0MKT4KZ7GMJAVD0YS9KKX"
+$ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
+$Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
 $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation"
 
 # Endpoint à interroger
