@@ -51,7 +51,7 @@ function Get-AssoConnectData {
             
             If ($Response.'hydra:totalItems') {
                     $TotalItem = $response.'hydra:totalItems'
-                    $TotalItem = 100
+                    #$TotalItem = 100
                 }
 
             # Cas API Hydra (JSON-LD)

@@ -167,7 +167,7 @@ function Get-AssoConnectData {
                If ($Response.'hydra:totalItems') {
 
                 $TotalItem = $response.'hydra:totalItems'
-                $TotalItem = 100
+                #$TotalItem = 100
                
                # $TotalItem | Out-File "D:\200 - Développement info\API\totalitem.txt"
                 }

@@ -2,15 +2,15 @@
 # Configuration
 # ==========================================
 
-# tests
-# $ApiToken = "e48d0ed9cc62a5b6e173765ece28e828c63842ff"
-# $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/01GWH0MKT4KZ7GMJAVD0YS9KKX"
-# production
 $ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
-$BaseUrl = "https://app.assoconnect.com/api/v1/organizations/01H0HRRZE6KWCK4JGYMWG7KX49"
+$Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
+$BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation/groups"
 
-# Endpoint à interroger
-$Endpoint_p1 = "groups"
+$RepApp = Get-Location
+$RepData = "$RepApp\output\"
+
+$Type = "CHAPTER_STATIC"
+
 
 # Nombre d'éléments par page
 $ItemsPerPage = 100
@@ -40,7 +40,7 @@ function Get-AssoConnectData {
     $HasMoreData = $true
 
     while ($HasMoreData) {
-        $Url = "$BaseUrl/$Endpoint_p1"+"?page=$page&itemsPerPage=$ItemsPerPage"
+        $Url = "$BaseUrl"+"?page=$page&itemsPerPage=$ItemsPerPage"
 
         Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
         try {
@@ -50,6 +50,7 @@ function Get-AssoConnectData {
                 -Headers $Headers
 
             Foreach($Group in $Response.'hydra:member') {
+                If ($Group.type -eq $Type) {
                     $NouvelleLigne = [PSCustomObject]@{
                         Id = $Group.'id'
                         Nom = $Group.'name'
@@ -63,12 +64,13 @@ function Get-AssoConnectData {
                     # ==========================================
                    
                     $NouvelleLigne | Export-Csv `
-                    -Path "D:\200 - Développement info\API\Groups.csv" `
+                    -Path "$RepData\Groups_avances.csv" `
                     -NoTypeInformation `
                     -Encoding UTF8 `
                     -Delimiter ";" `
                     -Append
                 }
+            }
             If ($Response.'hydra:totalItems') {
                 $TotalItem = $response.'hydra:totalItems'
             }
@@ -118,4 +120,4 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 
 $Results |
 ConvertTo-Json -Depth 20 |
-Out-File "D:\200 - Développement info\API\$Endpoint_p1.json" -Encoding UTF8
+Out-File "$RepData\Groupes_Avances .json" -Encoding UTF8

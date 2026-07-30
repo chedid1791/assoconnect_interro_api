@@ -2,17 +2,15 @@
 # Configuration
 # ==========================================
 
-$ApiToken = "e48d0ed9cc62a5b6e173765ece28e828c63842ff"
-$Organisation = "01GWH0MKT4KZ7GMJAVD0YS9KKX"
-$BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation"
+$ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
+$Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
+$BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation/groups"
 
-# Endpoint à interroger
-$Endpoint_p1 = "crm"
-$Endpoint_p2 = "/contacts"
-$Endpoint = $Endpoint_p1+$Endpoint_p2
+$RepApp = Get-Location
+$RepData = "$RepApp\output\"
 
 # Nombre d'éléments par page
-$ItemsPerPage = 1000
+$ItemsPerPage = 100
 
 # ==========================================
 # En-têtes HTTP
@@ -33,35 +31,56 @@ function Get-AssoConnectData {
         [string]$Endpoint, 
         [int]$ItemsPerPage
     )
+
     $AllResults = @()
     $Page = 1
     $HasMoreData = $true
-    $ItemsTotaux = 0
 
-    write-host "Endpoint : $Endpoint"
+    while ($HasMoreData) {
+        $Url = "$BaseUrl"+"?page=$page&itemsPerPage=$ItemsPerPage"
 
-   # $Url = "$BaseUrl/$Endpoint"+"?page=$page&itemsPerPage=$ItemsPerPage"
-   $Url = "https://app.assoconnect.com/api/v1/crm/contacts/"
-
-        Write-Host "url : $url"
         Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
-
         try {
             $Response = Invoke-RestMethod `
                 -Uri $Url  `
                 -Method GET `
                 -Headers $Headers
 
-                Write-Host "$Response"
+            
+            If ($Response.'hydra:totalItems') {
+                $TotalItem = $response.'hydra:totalItems'
+            }
+
+            # Cas API Hydra (JSON-LD)
+            if ($Response.'hydra:member') {
+
+                $Items = $Response.'hydra:member'
+
+                $AllResults += $Items
+
+                $ItemsTotaux = $Itemstotaux +$Items.Count
+
+                if ($ItemsTotaux -eq $TotalItem) {
+                    $HasMoreData = $false
+                }
+                else {
+                    $Page++
+                }
+            }
+            else {
+
+                Write-Warning "Aucune donnée trouvée."
+                $HasMoreData = $false
+            }
         }
-        
+
         catch {
             Write-Error "Erreur API : $($_.Exception.Message)"
             $HasMoreData = $false
         }
-       
+    }
  return $AllResults
- }
+}
 # ==========================================
 # Exécution
 # ==========================================
@@ -76,11 +95,5 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 # ==========================================
 
 $Results |
-    ConvertTo-Json -Depth 20 |
-    Out-File "D:\200 - Développement info\API\$Endpoint_P1.json" -Encoding UTF8
-
-Write-Host ""
-Write-Host "Fichiers générés :" -ForegroundColor Green
-Write-Host " - $Endpoint.csv"
-Write-Host " - $Endpoint.json"
-
+ConvertTo-Json -Depth 20 |
+Out-File "$RepData\Allgroupes.json" -Encoding UTF8
