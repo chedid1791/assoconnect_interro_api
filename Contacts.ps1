@@ -6,6 +6,9 @@ $ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
 $Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
 $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation"
 
+$RepApp = Get-Location
+$RepData = "$RepApp\output\"
+
 # Endpoint à interroger
 $Endpoint_p1 = "contacts"
 $Endpoint_p2 = "?relationType=MEMBERSHIP"
@@ -152,7 +155,7 @@ function Get-AssoConnectData {
                     # ==========================================
                    
                     $NouvelleLigne | Export-Csv `
-                    -Path "D:\200 - Développement info\API\contacts_2.csv" `
+                    -Path "$RepData\contacts_2.csv" `
                     -NoTypeInformation `
                     -Encoding UTF8 `
                     -Delimiter ";" `
@@ -164,6 +167,7 @@ function Get-AssoConnectData {
                If ($Response.'hydra:totalItems') {
 
                 $TotalItem = $response.'hydra:totalItems'
+                $TotalItem = 100
                
                # $TotalItem | Out-File "D:\200 - Développement info\API\totalitem.txt"
                 }
@@ -213,7 +217,7 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 
 $Results |
     ConvertTo-Json -Depth 20 |
-    Out-File "D:\200 - Développement info\API\$Endpoint_P1.json" -Encoding UTF8
+    Out-File "$RepData\$Endpoint_P1.json" -Encoding UTF8
 
 Write-Host ""
 Write-Host "Fichiers générés :" -ForegroundColor Green

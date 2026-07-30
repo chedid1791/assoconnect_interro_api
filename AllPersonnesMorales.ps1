@@ -5,6 +5,9 @@
 $ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
 $Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
 
+$RepApp = Get-Location
+$RepData = "$RepApp\output\"
+
 $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation/contacts/?type=STRUCTURE"
 
 # Nombre d'éléments par page
@@ -96,7 +99,7 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 
 $Results |
     ConvertTo-Json -Depth 20 |
-    Out-File "D:\200 - Développement info\API\structures.json" -Encoding UTF8
+    Out-File "$RepData\personnes_morales.json" -Encoding UTF8
 
 Write-Host ""
 Write-Host "Fichiers générés :" -ForegroundColor Green
