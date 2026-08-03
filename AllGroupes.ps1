@@ -40,7 +40,7 @@ function Get-AssoConnectData {
     while ($HasMoreData) {
         $Url = "$BaseUrl"+"?page=$page&itemsPerPage=$ItemsPerPage"
 
-        Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
+        # Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
         try {
             $Response = Invoke-RestMethod `
                 -Uri $Url  `
@@ -62,7 +62,7 @@ function Get-AssoConnectData {
                 # ==========================================
                    
                 $NouvelleLigne | Export-Csv `
-                -Path "$RepData\Groups.csv" `
+                -Path "$RepData\All_Groups.csv" `
                 -NoTypeInformation `
                 -Encoding UTF8 `
                 -Delimiter ";" `
@@ -117,4 +117,4 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 
 $Results |
 ConvertTo-Json -Depth 20 |
-Out-File "$RepData\Allgroupes.json" -Encoding UTF8
+Out-File "$RepData\All_Groups.json" -Encoding UTF8

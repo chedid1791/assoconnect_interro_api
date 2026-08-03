@@ -63,9 +63,9 @@ function Get-AssoConnectData {
                     $_.type -eq "AFFILIATION"
                     } | Select-Object
 
-                # If ($contact.lastname -eq "SCHALLER") {
-                #   write-host "contact trouvé"
-                #}
+                If ($contact.email -eq "desprezjerome@gmail.com") {
+                write-host "contact trouvé"
+                
 
                     $compteur_total = $affiliation.count
 
@@ -167,7 +167,7 @@ function Get-AssoConnectData {
                     -Encoding UTF8 `
                     -Delimiter ";" `
                     -Append
-
+                }
                $compteur_total--
                }
 
