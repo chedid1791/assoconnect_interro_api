@@ -4,6 +4,7 @@
 
 $ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
 $Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
+
 $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation/groups"
 
 $RepApp = Get-Location
@@ -54,6 +55,7 @@ function Get-AssoConnectData {
                     Mail = $Group.'email'
                     Date_Creation = $Group.'createdAt'
                     Type = $Group.'type'
+                    isAdvanced = $Group.'isAdvanced'
                 }
                 # ==========================================
                 # Export CSV

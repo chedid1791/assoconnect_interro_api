@@ -40,7 +40,7 @@ function Get-AssoConnectData {
     while ($HasMoreData) {
 
         $Url = "$BaseUrl"+"&page=$page&itemsPerPage=$ItemsPerPage"
-        Write-Host "Url : $url"
+        # Write-Host "Url : $url"
 
         Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
 
