@@ -46,7 +46,26 @@ function Get-AssoConnectData {
                 -Method GET `
                 -Headers $Headers
 
-            
+            Foreach($Group in $Response.'hydra:member') {
+                $NouvelleLigne = [PSCustomObject]@{
+                    Id = $Group.'id'
+                    Nom = $Group.'name'
+                    Tel = $Group.'phoneNumber'
+                    Mail = $Group.'email'
+                    Date_Creation = $Group.'createdAt'
+                    Type = $Group.'type'
+                }
+                # ==========================================
+                # Export CSV
+                # ==========================================
+                   
+                $NouvelleLigne | Export-Csv `
+                -Path "$RepData\Groups.csv" `
+                -NoTypeInformation `
+                -Encoding UTF8 `
+                -Delimiter ";" `
+                -Append
+                }    
             If ($Response.'hydra:totalItems') {
                 $TotalItem = $response.'hydra:totalItems'
             }

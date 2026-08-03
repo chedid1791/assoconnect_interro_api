@@ -4,7 +4,6 @@
 
 $ApiToken = "c25b826deaf6ea84a1b5fda376b2dd000ec21a5e"
 $Organisation = "01H0HRRZE6KWCK4JGYMWG7KX49"
-
 $BaseUrl = "https://app.assoconnect.com/api/v1/organizations/$Organisation"
 
 $RepApp = Get-Location
@@ -46,7 +45,7 @@ function Get-AssoConnectData {
         $Endpoint = "contacts"
 
         $Url = "$BaseUrl/$Endpoint"+"?page=$page&itemsPerPage=$ItemsPerPage"
-        # Write-Host "Url : $url"
+        Write-Host "Url : $url"
 
         Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
 
@@ -62,19 +61,12 @@ function Get-AssoConnectData {
                     $Affiliation = $Contact.relations | Where-Object {
                     $_.type -eq "AFFILIATION"
                     } | Select-Object
-
-                    If ($contact.lastname -eq "SCHALLER") {
-                        write-host "contact trouvé"
-                    }
-
                    
                     $compteur_total = $affiliation.count
 
                     $GA = @()
                     $GA1 = @()
-                    $GA2 = @()
 
-                    $GA2 += ($Affiliation[($compteur_total-1)].Organization)
                     $GA1 += ($Affiliation[($compteur_total-2)].Organization -split '/')[-1]
 
                     foreach ($Relation in $Affiliation) {

@@ -120,4 +120,4 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 
 $Results |
 ConvertTo-Json -Depth 20 |
-Out-File "$RepData\Groupes_Avances .json" -Encoding UTF8
+Out-File "$RepData\Groupes_Avances.json" -Encoding UTF8
