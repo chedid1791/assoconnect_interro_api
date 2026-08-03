@@ -48,7 +48,7 @@ function Get-AssoConnectData {
         $Url = "$BaseUrl/$Endpoint"+"?page=$page&itemsPerPage=$ItemsPerPage"
         # Write-Host "Url : $url"
 
-        Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
+        # Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
 
         try {
             $Response = Invoke-RestMethod `
@@ -63,11 +63,10 @@ function Get-AssoConnectData {
                     $_.type -eq "AFFILIATION"
                     } | Select-Object
 
-                    If ($contact.lastname -eq "SCHALLER") {
-                        write-host "contact trouvé"
-                    }
+                # If ($contact.lastname -eq "SCHALLER") {
+                #   write-host "contact trouvé"
+                #}
 
-                   
                     $compteur_total = $affiliation.count
 
                     $GA = @()
