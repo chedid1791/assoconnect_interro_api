@@ -204,6 +204,20 @@ if (Test-Path "$RepOutput\Groups_avances.csv") {
     Write-Log "Le fichier '$RepOutput\Groups_avances.csv' n'existe pas. Aucun renommage nécessaire." -Level INFO
 }
 
+if (Test-Path "$RepOutput\Groups_avances.json") {
+    $Dossier = Split-Path "$RepOutput\Groups_avances.json"
+    $Nom = [System.IO.Path]::GetFileNameWithoutExtension("$RepOutput\Groups_avances.json")
+    $Extension = [System.IO.Path]::GetExtension("$RepOutput\Groups_avances.json")
+    $Date = Get-Date -Format "yyyyMMdd_HHmmss"
+
+    $NouveauNom = "$Nom`_$Date$Extension"
+
+    Rename-Item -Path "$RepOutput\Groups_avances.json" -NewName $NouveauNom
+    Write-Log "Le fichier '$RepOutput\Groups_avances.json' a été renommé en '$NouveauNom'." -Level SUCCESS
+}else {
+    Write-Log "Le fichier '$RepOutput\Groups_avances.json' n'existe pas. Aucun renommage nécessaire." -Level INFO
+}
+
 $Results = Get-GroupesAvances -baseUrl $BaseUrl -Endpoint "groups" -ItemsPerPage 100
 
 # ==========================================
