@@ -1,5 +1,4 @@
-﻿write-Log "Début du script" -Level INFO
-# ==========================================
+﻿# ==========================================
 # Configuration
 # ==========================================
 
@@ -16,21 +15,6 @@ $ListeARD_DT = "ARD_DT.csv"
 
 # Nombre d'éléments par page
 $ItemsPerPage = 100
-
-#==========================================
-# Charger les paramètres
-#==========================================
-If (test-Path $RepParam\$ParamFile) {
-    $Config = Import-LocalizedData -BaseDirectory $RepParam -FileName $ParamFile
-    $BaseUrl = $config.ApiUrl
-    write-host $baseurl
-    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est chargé." -Level SUCCESS
-} else {
-    # Write-Host "Le fichier de paramètres '$ParamFile' est introuvable." -ForegroundColor yellow
-    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est introuvable." -Level ERROR
-    Exit 1
-}   
-#==========================================
 
 # ==========================================
 # En-têtes HTTP
@@ -188,7 +172,22 @@ function Get-GroupesAvances {
 # ==========================================
 # Main script
 # ==========================================
+write-Log "Début du script" -Level INFO
 
+#==========================================
+# Charger les paramètres
+#==========================================
+If (test-Path $RepParam\$ParamFile) {
+    $Config = Import-LocalizedData -BaseDirectory $RepParam -FileName $ParamFile
+    $BaseUrl = $config.ApiUrl
+    write-host $baseurl
+    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est chargé." -Level SUCCESS
+} else {
+    # Write-Host "Le fichier de paramètres '$ParamFile' est introuvable." -ForegroundColor yellow
+    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est introuvable." -Level ERROR
+    Exit 1
+}   
+#==========================================
 
 if (Test-Path "$RepOutput\Groups_avances.csv") {
     $Dossier = Split-Path "$RepOutput\Groups_avances.csv"
