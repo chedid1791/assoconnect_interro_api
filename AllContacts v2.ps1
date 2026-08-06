@@ -112,6 +112,7 @@ Write-Host "Fin de la procédure d'indexation des groupes." -ForegroundColor Gre
                         Commentaires = $Contact.customFields."Commentaires"
                         Date_de_sortie= $Contact.customFields."Date-de-sortie"
                         Motif_de_sortie = $Contact.customFields."Motif-sortie"
+                        Structure = $
 
                         # Informations complémentaires bénévoles uniquement
                         CPSTI = $Contact.customFields."Ancien-adherent-au-regime-social-des-independants-RSI-CPSTI"
@@ -214,10 +215,10 @@ Write-Host "Total récupéré : $($Results.Count)" -ForegroundColor Green
 
 $Results |
     ConvertTo-Json -Depth 20 |
-    Out-File "$RepData\$Endpoint_P1.json" -Encoding UTF8
+    Out-File "$RepData\$Endpoint.json" -Encoding UTF8
 
-Write-Host ""
-Write-Host "Fichiers générés :" -ForegroundColor Green
-Write-Host " - $Endpoint.csv"
-Write-Host " - $Endpoint.json"
-
+Write-Host "!--------------------------------------------!" -ForegroundColor Green
+Write-Host "!         Les fichiers suivantsgénérés :     !" -ForegroundColor Green
+Write-Host " - $Endpoint.csv" -ForegroundColor Yellow
+Write-Host " - $Endpoint.json" -ForegroundColor Yellow
+Write-Host "!--------------------------------------------!" -ForegroundColor Green
