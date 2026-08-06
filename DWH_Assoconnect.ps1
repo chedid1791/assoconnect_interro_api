@@ -45,6 +45,10 @@ $Headers = @{
 # Les fonctions
 # ==========================================
 
+# ==========================================
+# Fonction log
+# ==========================================
+
 function Write-Log {
     param(
         [Parameter(Mandatory)]
@@ -176,10 +180,29 @@ function Get-GroupesAvances {
     }
     Return $AllResults
 }
+# ==========================================
+# Fin de déclaration des fonctions
+# ==========================================
+
 
 # ==========================================
 # Main script
 # ==========================================
+
+
+if (Test-Path "$RepOutput\Groups_avances.csv") {
+    $Dossier = Split-Path "$RepOutput\Groups_avances.csv"
+    $Nom = [System.IO.Path]::GetFileNameWithoutExtension("$RepOutput\Groups_avances.csv")
+    $Extension = [System.IO.Path]::GetExtension("$RepOutput\Groups_avances.csv")
+    $Date = Get-Date -Format "yyyyMMdd_HHmmss"
+
+    $NouveauNom = "$Nom`_$Date$Extension"
+
+    Rename-Item -Path "$RepOutput\Groups_avances.csv" -NewName $NouveauNom
+    Write-Log "Le fichier '$RepOutput\Groups_avances.csv' a été renommé en '$NouveauNom'." -Level SUCCESS
+}else {
+    Write-Log "Le fichier '$RepOutput\Groups_avances.csv' n'existe pas. Aucun renommage nécessaire." -Level INFO
+}
 
 $Results = Get-GroupesAvances -baseUrl $BaseUrl -Endpoint "groups" -ItemsPerPage 100
 
