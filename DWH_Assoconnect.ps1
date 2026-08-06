@@ -66,7 +66,7 @@ function Write-Log {
 
     $Line = "[{0}] [{1}] {2}" -f $Date, $Level, $Message
 
-    Add-Content -Path $LogFile -Value $Line
+    Add-Content -Path $LogFile -Value $Line -Encoding UTF8
 }
 
 # ==========================================
@@ -132,19 +132,31 @@ function Get-GroupesAvances {
             Foreach($Association in $Response.'hydra:member') {
                 If ($Association.type -eq $Type){
                     If($association.'id' -notin $IndexARD_DT.Keys) {
+                        $urlAssocloc = "$baseUrl/organizations/$($Association.'id')/address"
+                        Try {
+                            $ResponseAssocloc = Invoke-RestMethod `
+                                -Uri $urlAssocloc `
+                                -Method GET `
+                                -Headers $Headers
+                            $Departement = $ResponseAssocloc.'administrativeArea2'
+                            $Région = $ResponseAssocloc.'administrativeArea1'
+                        }
+                        Catch {
+                            Write-Log "Erreur lors de l'appel à l'API pour l'adresse de l'association $($Association.'id') : $($_.Exception.Message)" -Level ERROR
+                            Exit 1
+                        }
                         $AssociationLocale = [PSCustomObject]@{
                         Id = $Association.'id'
                         Nom = $Association.'name'
-                        Tel = $Association.'phoneNumber'
-                        Mail = $Association.'email'
-                        Date_Creation = $Association.'createdAt'
+                        Departement = $Departement
+                        Region = $Région
                         Type = $Association.'type'
                     }
                     $AllResults += $AssociationLocale
 
                     } else {
-                        write-log "Le groupe avancé avec l'ID $($Association.'id') est exclu car il est présent dans la liste ARD_DT." -Level INFO
-                        # write-log "Le groupe avancé $($Association.'name') est exclu." -level ERROR
+                        write-log "Le groupe avancé avec l'ID $($Association.'id') est exclu car il est présent dans la liste ARD_DT." -Level WARNING
+                        # write-log "Le groupe avancé $($Association.'name') est exclu." -level
                     }
                 }
             }
@@ -165,13 +177,23 @@ function Get-GroupesAvances {
     Return $AllResults
 }
 
-
 # ==========================================
 # Main script
 # ==========================================
 
 $Results = Get-GroupesAvances -baseUrl $BaseUrl -Endpoint "groups" -ItemsPerPage 100
+
+# ==========================================
+# Export csv
+# ==========================================
+
 $Results | Export-Csv -Path "$RepOutput\Groups_avances.csv" -NoTypeInformation -Encoding UTF8 -Delimiter ";"
+
+# ==========================================
+# Export JSON
+# ==========================================
+
+$Results | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\Groups_avances.json" -Encoding UTF8
 
 Write-Log "Fin du script"
 
