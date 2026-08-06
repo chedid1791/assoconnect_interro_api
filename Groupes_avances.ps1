@@ -82,7 +82,7 @@ function Get-AssoConnectData {
 
                 $AllResults += $Items
 
-                $ItemsTotaux = $Itemstotaux +$Items.Count
+                $ItemsTotaux = $Itemstotaux + $Items.Count
 
                 if ($ItemsTotaux -eq $TotalItem) {
                     $HasMoreData = $false
