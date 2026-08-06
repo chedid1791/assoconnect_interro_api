@@ -5,3 +5,15 @@
 [2026-08-06 19:43:37] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Input\ARD_DT.csv' est chargé.
 [2026-08-06 19:43:37] [INFO] Indexation des groupes avancés ARD_DT terminée. Nombre de groupes : 15
 [2026-08-06 19:43:37] [ERROR] Erreur lors de l'appel à l'API : La référence d'objet n'est pas définie à une instance d'un objet.
+[2026-08-06 19:49:01] [INFO] Début du script
+[2026-08-06 19:49:01] [INFO] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.csv' n'existe pas. Aucun renommage nécessaire.
+[2026-08-06 19:49:01] [INFO] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.json' n'existe pas. Aucun renommage nécessaire.
+[2026-08-06 19:49:01] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Input\ARD_DT.csv' est chargé.
+[2026-08-06 19:49:01] [INFO] Indexation des groupes avancés ARD_DT terminée. Nombre de groupes : 15
+[2026-08-06 19:49:01] [ERROR] Erreur lors de l'appel à l'API : La référence d'objet n'est pas définie à une instance d'un objet.
+[2026-08-06 19:49:42] [INFO] Début du script
+[2026-08-06 19:49:42] [INFO] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.csv' n'existe pas. Aucun renommage nécessaire.
+[2026-08-06 19:49:42] [INFO] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.json' n'existe pas. Aucun renommage nécessaire.
+[2026-08-06 19:49:42] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Input\ARD_DT.csv' est chargé.
+[2026-08-06 19:49:42] [INFO] Indexation des groupes avancés ARD_DT terminée. Nombre de groupes : 15
+[2026-08-06 19:49:42] [ERROR] Erreur lors de l'appel à l'API : La référence d'objet n'est pas définie à une instance d'un objet.
