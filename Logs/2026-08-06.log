@@ -17,3 +17,48 @@
 [2026-08-06 19:49:42] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Input\ARD_DT.csv' est chargé.
 [2026-08-06 19:49:42] [INFO] Indexation des groupes avancés ARD_DT terminée. Nombre de groupes : 15
 [2026-08-06 19:49:42] [ERROR] Erreur lors de l'appel à l'API : La référence d'objet n'est pas définie à une instance d'un objet.
+[2026-08-06 19:51:15] [INFO] Début du script
+[2026-08-06 19:51:15] [INFO] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.csv' n'existe pas. Aucun renommage nécessaire.
+[2026-08-06 19:51:15] [INFO] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.json' n'existe pas. Aucun renommage nécessaire.
+[2026-08-06 19:51:15] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Input\ARD_DT.csv' est chargé.
+[2026-08-06 19:51:16] [INFO] Indexation des groupes avancés ARD_DT terminée. Nombre de groupes : 15
+[2026-08-06 19:51:16] [INFO] Nombre total d'éléments : 395
+[2026-08-06 19:51:18] [WARNING] Le groupe avancé avec l'ID 01H0HTD2DQH6GWG0SR5ZAH5W6Z est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:29] [WARNING] Le groupe avancé avec l'ID 01H0HTETAB1V2F7QDR9G0KDW4D est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:32] [WARNING] Le groupe avancé avec l'ID 01H0HTFPJ18YE6481ZEV4EBZKV est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:32] [WARNING] Le groupe avancé avec l'ID 01H0HTFQB0TDPGWF9QBKPS715V est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:39] [WARNING] Le groupe avancé avec l'ID 01H0HTHEW4QVWNP2VTM1X7X14F est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:40] [WARNING] Le groupe avancé avec l'ID 01H0HTHGRYD0K02FJM02BHD2QW est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:43] [WARNING] Le groupe avancé avec l'ID 01H0HTJERXMADQ6XQK60KTATFV est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:45] [WARNING] Le groupe avancé avec l'ID 01HM8MXZNB4M99TKDFNBYCKM1N est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:45] [WARNING] Le groupe avancé avec l'ID 01HNFW9NDNEP4BB1YVGCEBZ5DY est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:45] [WARNING] Le groupe avancé avec l'ID 01HNFXGEPDFJH2ZJ1VR5QR2PXF est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:48] [WARNING] Le groupe avancé avec l'ID 01J1HK6H6HVWPE1AC28AMRSWE2 est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:48] [WARNING] Le groupe avancé avec l'ID 01JJPBYHGXQ4NTY33ZFMAC99CV est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:48] [WARNING] Le groupe avancé avec l'ID 01JQZXXMS8TWWY7DREQWREHPYH est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:48] [WARNING] Le groupe avancé avec l'ID 01K3NZ2ADQ8DKJ2ZSM4WSG607H est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:49] [WARNING] Le groupe avancé avec l'ID 01K6DTP590YMRWGNNZ26G12JDE est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:51:50] [INFO] Fin du script
+[2026-08-06 19:54:36] [SUCCESS] Le fichier de paramètres 'D:\200 - Développement info\assoconnect_interro_api\Parametres\Params.psd1' est chargé.
+[2026-08-06 19:54:36] [INFO] Début du script
+[2026-08-06 19:54:36] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.csv' a été renommé en 'Groups_avances_20260806_195436.csv'.
+[2026-08-06 19:54:36] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Output\Groups_avances.json' a été renommé en 'Groups_avances_20260806_195436.json'.
+[2026-08-06 19:54:36] [SUCCESS] Le fichier 'D:\200 - Développement info\assoconnect_interro_api\Input\ARD_DT.csv' est chargé.
+[2026-08-06 19:54:36] [INFO] Indexation des groupes avancés ARD_DT terminée. Nombre de groupes : 15
+[2026-08-06 19:54:37] [INFO] Nombre total d'éléments : 395
+[2026-08-06 19:54:39] [WARNING] Le groupe avancé avec l'ID 01H0HTD2DQH6GWG0SR5ZAH5W6Z est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:54:52] [WARNING] Le groupe avancé avec l'ID 01H0HTETAB1V2F7QDR9G0KDW4D est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:54:55] [WARNING] Le groupe avancé avec l'ID 01H0HTFPJ18YE6481ZEV4EBZKV est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:54:55] [WARNING] Le groupe avancé avec l'ID 01H0HTFQB0TDPGWF9QBKPS715V est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:03] [WARNING] Le groupe avancé avec l'ID 01H0HTHEW4QVWNP2VTM1X7X14F est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:03] [WARNING] Le groupe avancé avec l'ID 01H0HTHGRYD0K02FJM02BHD2QW est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:06] [WARNING] Le groupe avancé avec l'ID 01H0HTJERXMADQ6XQK60KTATFV est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:08] [WARNING] Le groupe avancé avec l'ID 01HM8MXZNB4M99TKDFNBYCKM1N est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:08] [WARNING] Le groupe avancé avec l'ID 01HNFW9NDNEP4BB1YVGCEBZ5DY est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:08] [WARNING] Le groupe avancé avec l'ID 01HNFXGEPDFJH2ZJ1VR5QR2PXF est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:10] [WARNING] Le groupe avancé avec l'ID 01J1HK6H6HVWPE1AC28AMRSWE2 est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:11] [WARNING] Le groupe avancé avec l'ID 01JJPBYHGXQ4NTY33ZFMAC99CV est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:11] [WARNING] Le groupe avancé avec l'ID 01JQZXXMS8TWWY7DREQWREHPYH est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:11] [WARNING] Le groupe avancé avec l'ID 01K3NZ2ADQ8DKJ2ZSM4WSG607H est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:11] [WARNING] Le groupe avancé avec l'ID 01K6DTP590YMRWGNNZ26G12JDE est exclu car il est présent dans la liste ARD_DT.
+[2026-08-06 19:55:13] [INFO] Fin du script

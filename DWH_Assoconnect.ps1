@@ -1,18 +1,4 @@
-﻿#==========================================
-# Charger les paramètres
-#==========================================
-If (test-Path $RepParam\$ParamFile) {
-    $Config = Import-LocalizedData -BaseDirectory $RepParam -FileName $ParamFile
-    $BaseUrl = $config.ApiUrl
-    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est chargé." -Level SUCCESS
-} else {
-    # Write-Host "Le fichier de paramètres '$ParamFile' est introuvable." -ForegroundColor yellow
-    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est introuvable." -Level ERROR
-    Exit 1
-}   
-#==========================================
-
-# ==========================================
+﻿# ==========================================
 # Configuration
 # ==========================================
 
@@ -30,19 +16,6 @@ $ListeARD_DT = "ARD_DT.csv"
 
 # Nombre d'éléments par page
 $ItemsPerPage = 100
-
-# ==========================================
-# En-têtes HTTP
-# ==========================================
-
-$Headers = @{
-    "Accept"       = "application/ld+json"
-    "X-AUTH-TOKEN" = $config.Token
-}
-
-# ==========================================
-# Les fonctions
-# ==========================================
 
 # ==========================================
 # Fonction log
@@ -71,6 +44,34 @@ function Write-Log {
 
     Add-Content -Path $LogFile -Value $Line -Encoding UTF8
 }
+
+
+#==========================================
+# Charger les paramètres
+#==========================================
+If (test-Path $RepParam\$ParamFile) {
+    $Config = Import-LocalizedData -BaseDirectory $RepParam -FileName $ParamFile
+    $BaseUrl = $config.ApiUrl
+    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est chargé." -Level SUCCESS
+} else {
+    # Write-Host "Le fichier de paramètres '$ParamFile' est introuvable." -ForegroundColor yellow
+    Write-Log "Le fichier de paramètres '$RepParam\$ParamFile' est introuvable." -Level ERROR
+    Exit 1
+}   
+#==========================================
+
+# ==========================================
+# En-têtes HTTP
+# ==========================================
+
+$Headers = @{
+    "Accept"       = "application/ld+json"
+    "X-AUTH-TOKEN" = $config.Token
+}
+
+# ==========================================
+# Les fonctions
+# ==========================================
 
 # ==========================================
 # Fonction récupération des groupes avancés sans les Associations Régionales, locales et DT
