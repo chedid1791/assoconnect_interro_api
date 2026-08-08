@@ -7,7 +7,6 @@
 $RepApp = Get-Location
 $RepParam = "$RepApp\Parametres"
 $RepOutput = "$RepApp\Output"
-$RepInput = "$RepApp\Input"
 $RepLog = "$RepApp\Logs"
 
 # Source des paramètres
@@ -17,7 +16,6 @@ $NbContactsPP = 0
 $NbContactsPM = 0
 
 $Endpoint = "contacts"
-$ListeContacts= "$Endpoint.csv"
 $ListeGroupesAvances= "groups_avances.csv"
 
 # Nombre d'éléments par page
@@ -140,7 +138,6 @@ function Get-contacts {
         }
         Foreach ($Contact in $Response.'hydra:member') {
 
-            $GroupeAvance = @()
 
             $Affiliation = $Contact.relations | Where-Object {
                 $_.type -eq "AFFILIATION"
