@@ -136,141 +136,32 @@ function Get-contacts {
             Write-Log "Erreur lors de la lecture de la page $Page : $($_.Exception.Message)" -Level ERROR
             exit 1
         }
-        Foreach ($Contact in $Response.'hydra:member') {
-            $Affiliation = $Contact.relations | Where-Object {
-                $_.type -eq "AFFILIATION"
-            } | Select-Object
-            $Relation = ""
-            $GA_Nom = ""
-            $GA_Departement =""
-            $GA_Region =""
 
-            Foreach ($Relation in $Affiliation) {
-
-                $id_GroupeAvance =""
-
-                <#If ($Contact.'@id' -eq "/api/v1/crm/contacts/01H0QBKCGWC0GHFYRT09F5W32Y") {
-                    write-host $Contact.'@id'
-                }#>
-
-                $id_GroupeAvance = ($Relation.organization -split '/')[-1]
-
-                If ($id_GroupeAvance -in $IndexGroupeAvances.Keys) {
-                    $GA_Nom = $IndexGroupeAvances[$id_GroupeAvance].Nom
-                    $GA_Departement = $IndexGroupeAvances[$id_GroupeAvance].Departement
-                    $GA_Region = $IndexGroupeAvances[$id_GroupeAvance].Region
-                }
-            }
-           # Write-Host $Contact.Type
-           # Write-host $contact.'@id'
-
-            If ($Contact.Type -eq "PERSON"){
-                $NouvelleLignePP = [PSCustomObject]@{
-                    Id = ($Contact.'@id'-split '/')[-1]
-                    Type = $contact.Type
-                    Date_creation = $Contact.createdAt
-                    Date_modification = $Contact.creaupdateAt
-                    Prenom = $Contact.firstname
-                    Nom    = $Contact.lastname
-                    Genre = $Contact.gender
-                    Image = $Contact.profilPictureUrl
-                    Email  = $Contact.email
-                    T_Fixe = $Contact.landlinePhone
-                    Mobile = $Contact.mobilePhone
-                    Adresse_Street = $Contact.postalAddress.street1
-                    Adresse_Street2 = $Contact.postalAddress.street2
-                    Code_Postal = $Contact.postalAddress.postal
-                    Ville = $Contact.postalAddress.city
-                    Région = $Contact.postalAddress.administrativeArea1
-                    Département = $Contact.postalAddress.administrativeArea2
-                    Pays = $Contact.postalAddress.country
-                    Adresse_complete = $Contact.postalAddress.formattedAddress
-                    Date_Naissance = $Contact.dateOfBirth
-                    GA_Nom = $GA_Nom
-                    GA_Departement = $GA_Departement
-                    GA_Region = $GA_Region
-
-                    # Informations complémentaires bénévoles, jeunes et (partenaires)
-                    Rôle = $Contact.customFields."Role_P98owFE357qz"
-                    Atelier = $Contact.customFields."Atelier_9xLxw2fYNNdH"
-                    Présence = $Contact.customFields."Presence-aux-ateliers_Fv2EBQ6Vqy1C"
-                    Droit_image = $Contact.customFields."Droit-a-l-image_4nyX6TVRKLDb"
-                    Date_inscription = $Contact.customField."Date-inscription"
-                    Personne_a_contacter = $Contact.customFields."Personne-a-contacter-en-urgence-si-different-des-parents"
-                    Saison = $Contact.customFields."Saison-s"."01KS25BZEGDK3EMZX2ES4JQ1MC"
-                    Commentaires = $Contact.customFields."Commentaires"
-                    Date_de_sortie= $Contact.customFields."Date-de-sortie"
-                    Motif_de_sortie = $Contact.customFields."Motif-sortie"
-
-                    # Informations complémentaires bénévoles uniquement
-                    CPSTI = $Contact.customFields."Ancien-adherent-au-regime-social-des-independants-RSI-CPSTI"
-                    Délégués_au_vote_2026 = $Contact.customFields."Delegue-au-vote-AG-Nationale"
-
-                    # Informations complémentaires jeunes uniquement
-                    
-                    Autorisation_rentrée = $contact.custumfield."Sortie-autorisee_g128wVsBBXVq"
-                    Civilité_parent_1 = $Contact.customFields."Civilite-parent-1"
-                    Prénom_parent_1 = $Contact.customFields."Prenom-parent-1"
-                    Nom_parent_1 = $Contact.customFields."Nom-Parent-1"
-                    Adresse_parent_1 = $Contact.customFields."Adresse-parent-1_KuNgFtiVoiqc"
-                    Complément_adresse_parent_1 = $Contact.customFields."Complement-d-adresse-parent-1"
-                    Code_postal_parent_1 = $Contact.customFields."Code-postal-parent-1"
-                    Ville_parent_1 = $Contact.customFields."Ville-parent-1"
-                    Téléphone_parent_1 = $Contact.customFields."Telephone-parent-1"
-                    Email_parent_1 = $Contact.customFields."Email-parent-1"
-                    Civilité_parent_2 = $Contact.customFields."Civilite-parent-2"
-                    Prénom_parent_2 = $Contact.customFields."Prenom-parent-2"
-                    Nom_parent_2 = $Contact.customFields."Nom-Parent-2"
-                    Adresse_parent_2 = $Contact.customFields."Adresse-parent-2_xgJm1VLyifhF"
-                    Complément_adresse_parent_2 = $Contact.customFields."Complement-d-adresse-parent-2"
-                    Code_postal_parent_2 = $Contact.customFields."Code-postal-parent-2"
-                    Ville_parent_2 = $Contact.customFields."Ville-parent-2"
-                    Téléphone_parent_2 = $Contact.customFields."Telephone-parent-2"
-                    Email_parent_2 = $Contact.customFields."Email-parent-2"
-                    
-                    # National uniquement (champs réservés à l'équipe salariés)
-                    DT_Adm_Numérique_Sécurité_Communication = $Contact.customFields."DT-Administrateur-informatique"
-                    Compte_technique = $Contact.customFields."Compte-technique"
-                }
-                $NouvelleLignePP | Export-Csv `
-                    -Path "$RepOutput\Contacts_PP.csv" `
-                    -NoTypeInformation `
-                    -Encoding UTF8 `
-                    -Delimiter ";" `
-                    -Append
-                $NbContactsPP++
-            }
-            # Write-host $Contact.type
-            # Write-host $contact.'@id'
-
+        Foreach ($Contact in $Response.'hydra:member'){
             If ($Contact.type -eq "STRUCTURE"){
-                $NouvelleLignePM = [PSCustomObject]@{
-                    Id = ($Contact.'@id'-split '/')[-1]
-                    Type = $contact.Type
-                    Status = $Contact.status
-                    Name = $Contact.name
-                    Email = $Contact.email
-                    TelMobile = $Contact.mobilePhone
-                    Code_Postal = $Contact.postalAddress.postal
-                    Ville = $Contact.postalAddress.city
-                    Région = $Contact.postalAddress.administrativeArea1
-                    Département = $Contact.postalAddress.administrativeArea2
-                    Pays = $Contact.postalAddress.country
-                    DateDeCréation = $Contact.createdAt
-                    DateDeModification = $Contact.updatedAt
-                    ListeDesMembres = $($Contact.contactIrisOfPeopleBelongingToStructure)
+                $Affiliations = $Contact.contactIrisOfPeopleBelongingToStructure
+
+                Foreach ($Affiliation in $Affiliations){
+                    $NouvelleLignePM = [PSCustomObject]@{
+                        Id = $Contact.'@id'
+                        Type = $Contact.Type
+                        Status = $Contact.statusv
+                        Name = $Contact.name
+                        Contact = ($Affiliation-split '/')[-1]
+                    }
+                
+                    $NouvelleLignePM | Export-Csv `
+                        -Path "$RepOutput\Structures.csv" `
+                        -NoTypeInformation `
+                        -Encoding UTF8 `
+                        -Delimiter ";" `
+                        -Append
                 }
 
-                $NouvelleLignePM | Export-Csv `
-                    -Path "$RepOutput\Contacts_PM.csv" `
-                    -NoTypeInformation `
-                    -Encoding UTF8 `
-                    -Delimiter ";" `
-                    -Append
                 $NbContactsPM++
             }
         }
-         if ($Response.'hydra:member') {
+            if ($Response.'hydra:member') {
                 $Items = $Response.'hydra:member'
                 $AllResults += $Items
 
