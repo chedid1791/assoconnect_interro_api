@@ -129,7 +129,7 @@ function Get-contacts {
             If ($Response.'hydra:totalItems') {
                 $TotalItem = $response.'hydra:totalItems'
                 write-Log "Nombre de contacts dans la base assoconnect : $TotalItem" -Level INFO
-                write-host "Nombre de contacts dans la base assoconnect : $TotalItem"
+                # write-host "Nombre de contacts dans la base assoconnect : $TotalItem"
             }
         }
         catch {
@@ -137,8 +137,6 @@ function Get-contacts {
             exit 1
         }
         Foreach ($Contact in $Response.'hydra:member') {
-
-
             $Affiliation = $Contact.relations | Where-Object {
                 $_.type -eq "AFFILIATION"
             } | Select-Object
@@ -151,7 +149,10 @@ function Get-contacts {
                     $GA_Region = $IndexGroupeAvances[$id_GroupeAvance].Region
                 }
             }
-            If ($Contact.Type = "PERSON"){
+           # Write-Host $Contact.Type
+           # Write-host $contact.'@id'
+
+            If ($Contact.Type -eq "PERSON"){
                 $NouvelleLignePP = [PSCustomObject]@{
                     Id = $Contact.'@id'
                     Type = $contact.Type
@@ -227,7 +228,10 @@ function Get-contacts {
                     -Append
                 $NbContactsPP++
             }
-            If ($Contact.type = "STRUCTURE"){
+            # Write-host $Contact.type
+            # Write-host $contact.'@id'
+
+            If ($Contact.type -eq "STRUCTURE"){
                 $NouvelleLignePM = [PSCustomObject]@{
                     Id = $Contact.'@id'
                     Type = $contact.Type
@@ -235,7 +239,7 @@ function Get-contacts {
                     Name = $Contact.name
                     Email = $Contact.email
                     TelMobile = $Contact.mobilePhone
-                    Code_Postal = $Conatct.postalAddress.postal
+                    Code_Postal = $Contact.postalAddress.postal
                     Ville = $Contact.postalAddress.city
                     Région = $Contact.postalAddress.administrativeArea1
                     Département = $Contact.postalAddress.administrativeArea2
@@ -265,6 +269,13 @@ function Get-contacts {
                 else {
                     $Page++
                 }
+
+                <#if ($ItemsTotaux -eq 600) {
+                    $HasMoreData = $false
+                }
+                else {
+                    $Page++
+                }#>
             }
             else {
 
@@ -327,14 +338,14 @@ if (Test-Path "$RepOutput\$Endpoint.json") {
 }
 
 $Results = Get-contacts -baseUrl $BaseUrl -Endpoint "contacts" -ItemsPerPage 100 -NbContactsPP 0 -NbContactsPM 0
-Write-Log "Nbre de contacts PP : $NbContactsPP"
-Write-Log "Nbre de contacts PM : $NbContactsPM"
+Write-Log "Nbre de contacts PP : $($Results[1])"
+Write-Log "Nbre de contacts PM : $($Results[2])"
 
 
 # ==========================================
 # Export JSON
 # ==========================================
 
-$Results | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
+$Results[0] | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
 
 Write-Log "Fin du script" -Level INFO
