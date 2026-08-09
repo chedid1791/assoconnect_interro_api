@@ -140,7 +140,7 @@ function Get-contacts {
             $Affiliation = $Contact.relations | Where-Object {
                 $_.type -eq "AFFILIATION"
             } | Select-Object
-
+            $id_GroupeAvance =""
             Foreach ($Relation in $Affiliation) {
                 $id_GroupeAvance = ($Relation.organization -split '/')[-1]
                 If ($id_GroupeAvance -in $IndexGroupeAvances.Keys) {
