@@ -144,6 +144,7 @@ function Get-GroupesAvances {
                                 -Headers $Headers
                             $Departement = $ResponseAssocloc.'administrativeArea2'
                             $Région = $ResponseAssocloc.'administrativeArea1'
+                            $CodePostal = $ResponseAssocloc.'Postal'
                         }
                         Catch {
                             Write-Log "Erreur lors de l'appel à l'API pour l'adresse de l'association $($Association.'id') : $($_.Exception.Message)" -Level ERROR
@@ -155,6 +156,7 @@ function Get-GroupesAvances {
                         Departement = $Departement
                         Region = $Région
                         Type = $Association.'type'
+                        Code_Postal = $CodePostal
                     }
                     $AllResults += $AssociationLocale
 

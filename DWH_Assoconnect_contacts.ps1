@@ -144,6 +144,7 @@ function Get-contacts {
             $GA_Nom = ""
             $GA_Departement =""
             $GA_Region =""
+            $GA_CP = ""
 
             Foreach ($Relation in $Affiliation) {
 
@@ -159,6 +160,7 @@ function Get-contacts {
                     $GA_Nom = $IndexGroupeAvances[$id_GroupeAvance].Nom
                     $GA_Departement = $IndexGroupeAvances[$id_GroupeAvance].Departement
                     $GA_Region = $IndexGroupeAvances[$id_GroupeAvance].Region
+                    $GA_CP = $IndexGroupeAvances[$id_GroupeAvance].Code_Postal
                 }
             }
            # Write-Host $Contact.Type
@@ -189,6 +191,7 @@ function Get-contacts {
                     GA_Nom = $GA_Nom
                     GA_Departement = $GA_Departement
                     GA_Region = $GA_Region
+                    GA_CP = $GA_CP
 
                     # Informations complémentaires bénévoles, jeunes et (partenaires)
                     Rôle = $Contact.customFields."Role_P98owFE357qz"
