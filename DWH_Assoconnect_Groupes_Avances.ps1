@@ -193,7 +193,7 @@ function Get-GroupesAvances {
 write-Log "Début du script" -Level INFO
 
 if (Test-Path "$RepOutput\Groups_avances.csv") {
-    $Dossier = Split-Path "$RepOutput\Groups_avances.csv"
+    # $Dossier = Split-Path "$RepOutput\Groups_avances.csv"
     $Nom = [System.IO.Path]::GetFileNameWithoutExtension("$RepOutput\Groups_avances.csv")
     $Extension = [System.IO.Path]::GetExtension("$RepOutput\Groups_avances.csv")
     $Date = Get-Date -Format "yyyyMMdd_HHmmss"
@@ -207,7 +207,7 @@ if (Test-Path "$RepOutput\Groups_avances.csv") {
 }
 
 if (Test-Path "$RepOutput\Groups_avances.json") {
-    $Dossier = Split-Path "$RepOutput\Groups_avances.json"
+    # $Dossier = Split-Path "$RepOutput\Groups_avances.json"
     $Nom = [System.IO.Path]::GetFileNameWithoutExtension("$RepOutput\Groups_avances.json")
     $Extension = [System.IO.Path]::GetExtension("$RepOutput\Groups_avances.json")
     $Date = Get-Date -Format "yyyyMMdd_HHmmss"
