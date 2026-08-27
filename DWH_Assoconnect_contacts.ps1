@@ -171,7 +171,7 @@ function Get-contacts {
                     Id = ($Contact.'@id'-split '/')[-1]
                     Type = $contact.Type
                     Date_creation = $Contact.createdAt
-                    Date_modification = $Contact.creaupdateAt
+                    Date_modification = $Contact.updatedAt
                     Prenom = $Contact.firstname
                     Nom    = $Contact.lastname
                     Genre = $Contact.gender
