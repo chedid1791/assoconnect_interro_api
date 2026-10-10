@@ -259,6 +259,12 @@ function Get-contacts {
                     Région = $Contact.postalAddress.administrativeArea1
                     Département = $Contact.postalAddress.administrativeArea2
                     Pays = $Contact.postalAddress.country
+                    Adresse_Atelier_Principal = $Contact.customFields."Adresse-atelier-principal"
+                    Adresse_Atelier_Secondaire = $Contact.customFields."Adresse-atelier-secondaire"
+                    Surface = $Contact.customFields."Surface-des-ateliers-en-M2"
+                    Valeur_locative = $Contact.customFields."Valeur-des-biens-en-euros"
+                    Nombre_de_jeunes = $Contact.customFields."Nombre-de-jeunes-au-31-juillet-2026"
+                    Nombre_de_bénévoles = $Contact.customFields."Nombre-de-benevoles-au-31-juillet-2026"
                     DateDeCréation = $Contact.createdAt
                     DateDeModification = $Contact.updatedAt
                     ListeDesMembres = $($Contact.contactIrisOfPeopleBelongingToStructure)
