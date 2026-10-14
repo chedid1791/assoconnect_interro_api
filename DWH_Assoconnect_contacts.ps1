@@ -207,7 +207,7 @@ function Get-contacts {
 
                     # Informations complémentaires bénévoles uniquement
                     CPSTI = $Contact.customFields."Ancien-adherent-au-regime-social-des-independants-RSI-CPSTI"
-                    Délégués_au_vote_2026 = $Contact.customFields."Delegue-au-vote-AG-Nationale"
+                    Délégués_au_vote_2026 = $Contact.customFields."Delegue-au-vote-AG-Nationale-2026"
 
                     # Informations complémentaires jeunes uniquement
                     
