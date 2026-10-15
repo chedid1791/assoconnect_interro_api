@@ -6,6 +6,7 @@
 #Répertoires de travail
 $RepApp = Get-Location
 $RepParam = "$RepApp\Parametres"
+$RepInput = "$RepApp\Input"
 $RepOutput = "$RepApp\Output"
 $RepLog = "$RepApp\Logs"
 
