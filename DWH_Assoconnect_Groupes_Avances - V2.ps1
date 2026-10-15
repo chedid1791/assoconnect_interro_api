@@ -182,6 +182,7 @@ If (test-Path $RepInput\$ListeARD) {
                         Region = $Région
                         Code_Postal = $CodePostal
                         TypeGA = $TypeGA
+                        UID = $CodePostal + "_" + $Association.'name'.Substring($Association.'name'.Length - 10)
                     }
                     $AllResults += $AssociationLocale
 
@@ -251,7 +252,8 @@ $Results = Get-GroupesAvances -baseUrl $BaseUrl -Endpoint "groups" -ItemsPerPage
 # Export csv
 # ==========================================
 
-$Results | Export-Csv -Path "$RepOutput\Groups_avances.csv" -NoTypeInformation -Encoding UTF8 -Delimiter ";"
+#$Results | Export-Csv -Path "$RepOutput\Groups_avances.csv" -NoTypeInformation -Encoding UTF8 -Delimiter ";"
+$Results | Export-Csv -Path "$RepOutput\Groups_avances.csv" -NoTypeInformation -Delimiter ";"
 
 # ==========================================
 # Export JSON
@@ -260,5 +262,5 @@ $Results | Export-Csv -Path "$RepOutput\Groups_avances.csv" -NoTypeInformation -
 $Results | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\Groups_avances.json" -Encoding UTF8
 
 Write-Log "Fin du script"
-
+Write-Host "Fin du script. Les résultats ont été exportés vers '$RepOutput\Groups_avances.csv' et '$RepOutput\Groups_avances.json'." -ForegroundColor Green
 
