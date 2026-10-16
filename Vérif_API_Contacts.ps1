@@ -46,44 +46,50 @@ function Get-contacts {
     param(
         [string]$BaseUrl,
         [string]$Endpoint, 
-        [int]$ItemsPerPage
-    )
+        [int]$ItemsPerPage)
+    
+    $ListeContactsdelaPage = @()
+    $ListedesContactsRecuperes = @()
 
-    $AllResults = @()
-    $Page = 135
+    $NombreDeContactsDansLaBase = 0
+    $NbreDeContactsRecuperes = 0
+
+    $Page = 134
     $HasMoreData = $true
-    $ItemsTotaux = 0
 
     while ($HasMoreData) {
+
+        $ListeContactsdelaPage = @()
 
         $Url = "$BaseUrl/organizations/$($config.Organisation)/$Endpoint"+"?page=$Page&itemsPerPage=$ItemsPerPage"
 
         Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
+
+        $response = $null
 
         try {
             $Response = Invoke-RestMethod `
                 -Uri $Url  `
                 -Method GET `
                 -Headers $Headers
-
-            If ($Response.'hydra:totalItems') {
-                $TotalItem = $response.'hydra:totalItems'
-                #write-Log "Nombre de contacts dans la base assoconnect : $TotalItem" -Level INFO
-                write-host "Nombre de contacts dans la base assoconnect : $TotalItem"
-            }
         }
         catch {
             Write-Host "Erreur lors de la lecture de la page $Page : $($_.Exception.Message)" -ForegroundColor Red
+            $ListeContactsdelaPage = @()
+            $ListeContactsdelaPage = $response.'hydra:member'
+            $ListeContactsdelaPage | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
             exit 1
         }
+        $NombreDeContactsDansLaBase = $Response.'hydra:totalItems'
+        Write-Host "Nombre de contacts dans la base assoconnect : $NombreDeContactsDansLaBase" -ForegroundColor Green
 
-         if ($Response.'hydra:member') {
-                $Items = $Response.'hydra:member'
-                $AllResults += $Items
+        If ($Response.'hydra:member') {
+                $ListeDesContactsdelaPage  = $Response.'hydra:member'
+                $ListeDesContactsRecuperes += $ListeDesContactsdelaPage
 
-                $ItemsTotaux = $Itemstotaux +$Items.Count
+                $NbreDeContactsRecuperes = $NbreDeContactsRecuperes + $ListeDesContactsdelaPage.Count
 
-                if ($ItemsTotaux -eq $TotalItem) {
+                if ($NbreDeContactsRecuperes -eq $NombreDeContactsDansLaBase) {
                     $HasMoreData = $false
                 }
                 else {
@@ -91,12 +97,11 @@ function Get-contacts {
                 }
             }
             else {
-
                 Write-Warning "Aucune donnée trouvée."
                 $HasMoreData = $false
             }
     }
-return $AllResults
+return $ListedesContactsRecuperes
 }
 # ==========================================
 # Fin de déclaration des fonctions
@@ -106,7 +111,6 @@ return $AllResults
 # ==========================================
 # Main script
 # ==========================================
-write-Log "Début du script" -Level INFO
 
 if (Test-Path "$RepOutput\$Endpoint.json") {
     $Nom = [System.IO.Path]::GetFileNameWithoutExtension("$RepOutput\$Endpoint.json")
@@ -117,14 +121,12 @@ if (Test-Path "$RepOutput\$Endpoint.json") {
 
     Rename-Item -Path "$RepOutput\$Endpoint.json" -NewName $NouveauNom
 }
-    
-
-    $Results = Get-contacts -baseUrl $BaseUrl -Endpoint "contacts" -ItemsPerPage 100
+    $ListedesContactsRecuperes = Get-contacts -baseUrl $BaseUrl -Endpoint "contacts" -ItemsPerPage $ItemsPerPage
 
 # ==========================================
 # Export JSON
 # ==========================================
 
-$Results | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
+$ListedesContactsRecuperes | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
 
 write-host "Fin du script"
