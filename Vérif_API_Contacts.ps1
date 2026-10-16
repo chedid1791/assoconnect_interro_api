@@ -84,24 +84,24 @@ function Get-contacts {
         Write-Host "Nombre de contacts dans la base assoconnect : $NombreDeContactsDansLaBase" -ForegroundColor Green
 
         If ($Response.'hydra:member') {
-                $ListeDesContactsdelaPage  = $Response.'hydra:member'
-                $ListeDesContactsRecuperes += $ListeDesContactsdelaPage
+            $ListeDesContactsdelaPage  = $Response.'hydra:member'
+            $ListeDesContactsRecuperes += $ListeDesContactsdelaPage
 
-                $NbreDeContactsRecuperes = $NbreDeContactsRecuperes + $ListeDesContactsdelaPage.Count
+            $NbreDeContactsRecuperes = $NbreDeContactsRecuperes + $ListeDesContactsdelaPage.Count
 
-                if ($NbreDeContactsRecuperes -eq $NombreDeContactsDansLaBase) {
-                    $HasMoreData = $false
+            if ($NbreDeContactsRecuperes -eq $NombreDeContactsDansLaBase) {
+                $HasMoreData = $false
                 }
-                else {
-                    $Page++
-                }
-            }
             else {
+                $Page++
+            }
+        }
+        else {
                 Write-Warning "Aucune donnée trouvée."
                 $HasMoreData = $false
-            }
+        }
     }
-return $ListedesContactsRecuperes
+    return $ListedesContactsRecuperes
 }
 # ==========================================
 # Fin de déclaration des fonctions
@@ -121,7 +121,7 @@ if (Test-Path "$RepOutput\$Endpoint.json") {
 
     Rename-Item -Path "$RepOutput\$Endpoint.json" -NewName $NouveauNom
 }
-    $ListedesContactsRecuperes = Get-contacts -baseUrl $BaseUrl -Endpoint "contacts" -ItemsPerPage $ItemsPerPage
+$ListedesContactsRecuperes = Get-contacts -baseUrl $BaseUrl -Endpoint "contacts" -ItemsPerPage $ItemsPerPage
 
 # ==========================================
 # Export JSON
