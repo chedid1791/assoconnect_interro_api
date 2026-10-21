@@ -19,7 +19,7 @@ $Endpoint = "contacts"
 $ListeGroupesAvances= "groups_avances.csv"
 
 # Nombre d'éléments par page
-$ItemsPerPage = 100
+$ItemsPerPage = 25
 
 # ==========================================
 # Fonction log
@@ -94,6 +94,7 @@ function Get-contacts {
     $Page = 1
     $HasMoreData = $true
     $ItemsTotaux = 0
+    $NumLigne = 1
 
     #Chargement de la liste des Associations locales et idexation
     If (test-Path $RepOutput\$ListegroupesAvances) {
@@ -124,6 +125,7 @@ function Get-contacts {
                 -Uri $Url  `
                 -Method GET `
                 -Headers $Headers
+                
 
             If ($Response.'hydra:totalItems') {
                 $TotalItem = $response.'hydra:totalItems'
@@ -136,22 +138,37 @@ function Get-contacts {
             exit 1
         }
         Foreach ($Contact in $Response.'hydra:member') {
+        # write-host "-------------------------------------------------------------" -ForegroundColor Yellow 
+        # write-host "Contact : $($Contact.firstname) $($Contact.lastname) - Type : $($Contact.Type) - Id : $($Contact.'@id')" -ForegroundColor Green
+        # Write-host "ligne : $NumLigne - Page : $Page - Total contacts : $TotalItem" -ForegroundColor Green
+        #write-host "-------------------------------------------------------------" -ForegroundColor Yellow
+        #if ($numLigne -eq 57) {
+        # write-host "Id contact : $($Contact.'@id')" -ForegroundColor Green
+        #}
             $Affiliation = $Contact.relations | Where-Object {
                 $_.type -eq "AFFILIATION"
             } | Select-Object
+
             $Relation = ""
             $GA_Nom = ""
             $GA_Departement =""
             $GA_Region =""
             $GA_CP = ""
+            $GA_Nom_ARD = ""
+            $GA_Departement_ARD = ""    
+            $GA_Region_ARD = ""
+            $GA_CP_ARD = ""
+            $GA_Nom_LOC = ""
+            $GA_Departement_LOC = ""    
+            $GA_Region_LOC = ""
+            $GA_CP_LOC = ""
 
             Foreach ($Relation in $Affiliation) {
 
                 $id_GroupeAvance =""
 
-
                 <#If ($Contact.'@id' -eq "/api/v1/crm/contacts/01H0QBKCGWC0GHFYRT09F5W32Y") {
-                    write-host $Contact.'@id'
+                    #write-host $Contact.'@id'
                 }#>
 
                 $id_GroupeAvance = ($Relation.organization -split '/')[-1]
@@ -162,7 +179,7 @@ function Get-contacts {
                     $GA_Region = $IndexGroupeAvances[$id_GroupeAvance].Region
                     $GA_CP = $IndexGroupeAvances[$id_GroupeAvance].Code_Postal
                     $TypeGA = $IndexGroupeAvances[$id_GroupeAvance].TypeGA
-                    #Write-host "Groupe avancé : $GA_Nom - Département : $GA_Departement - Région : $GA_Region - Code Postal : $GA_CP - Type : $TypeGA"
+                    
                     If ($TypeGA -eq "ARD") {
                         $GA_Nom_ARD = $GA_Nom
                         $GA_Departement_ARD = $GA_Departement
@@ -176,10 +193,12 @@ function Get-contacts {
                         $GA_CP_LOC = $GA_CP
                         #$id_GroupeAvance_LOC = "LOC"
                     }
-                }
+                } 
+                <#else {write-host "Le groupe avancé n'a pas été trouvé dans l'index."
+                }#>
             }
-           # Write-Host $Contact.Type
-           # Write-host $contact.'@id'
+            # Write-Host $Contact.Type
+            # Write-host $contact.'@id'
 
             If ($Contact.Type -eq "PERSON"){
                 $NouvelleLignePP = [PSCustomObject]@{
@@ -198,8 +217,8 @@ function Get-contacts {
                     Adresse_Street2 = $Contact.postalAddress.street2
                     Code_Postal = $Contact.postalAddress.postal
                     Ville = $Contact.postalAddress.city
-                    Région = $Contact.postalAddress.administrativeArea1
-                    Département = $Contact.postalAddress.administrativeArea2
+                    Region = $Contact.postalAddress.administrativeArea1
+                    Departement = $Contact.postalAddress.administrativeArea2
                     Pays = $Contact.postalAddress.country
                     Adresse_complete = $Contact.postalAddress.formattedAddress
                     Date_Naissance = $Contact.dateOfBirth
@@ -213,9 +232,9 @@ function Get-contacts {
                     GA_CP_LOC = $GA_CP_LOC
 
                     # Informations complémentaires bénévoles, jeunes et (partenaires)
-                    Rôle = $Contact.customFields."Role_P98owFE357qz"
+                    Role = $Contact.customFields."Role_P98owFE357qz"
                     Atelier = $Contact.customFields."Atelier_9xLxw2fYNNdH"
-                    Présence = $Contact.customFields."Presence-aux-ateliers_Fv2EBQ6Vqy1C"
+                    Presence = $Contact.customFields."Presence-aux-ateliers_Fv2EBQ6Vqy1C"
                     Droit_image = $Contact.customFields."Droit-a-l-image_4nyX6TVRKLDb"
                     Date_inscription = $Contact.customField."Date-inscription"
                     Personne_a_contacter = $Contact.customFields."Personne-a-contacter-en-urgence-si-different-des-parents"
@@ -226,32 +245,31 @@ function Get-contacts {
 
                     # Informations complémentaires bénévoles uniquement
                     CPSTI = $Contact.customFields."Ancien-adherent-au-regime-social-des-independants-RSI-CPSTI"
-                    Délégués_au_vote_2026 = $Contact.customFields."Delegue-au-vote-AG-Nationale-2026"
+                    Delegues_au_vote_2026 = $Contact.customFields."Delegue-au-vote-AG-Nationale-2026"
 
                     # Informations complémentaires jeunes uniquement
-                    
-                    Autorisation_rentrée = $contact.custumfield."Sortie-autorisee_g128wVsBBXVq"
-                    Civilité_parent_1 = $Contact.customFields."Civilite-parent-1"
-                    Prénom_parent_1 = $Contact.customFields."Prenom-parent-1"
+                    Autorisation_rentree = $contact.custumfield."Sortie-autorisee_g128wVsBBXVq"
+                    Civilite_parent_1 = $Contact.customFields."Civilite-parent-1"
+                    Prenom_parent_1 = $Contact.customFields."Prenom-parent-1"
                     Nom_parent_1 = $Contact.customFields."Nom-Parent-1"
                     Adresse_parent_1 = $Contact.customFields."Adresse-parent-1_KuNgFtiVoiqc"
-                    Complément_adresse_parent_1 = $Contact.customFields."Complement-d-adresse-parent-1"
+                    Complement_adresse_parent_1 = $Contact.customFields."Complement-d-adresse-parent-1"
                     Code_postal_parent_1 = $Contact.customFields."Code-postal-parent-1"
                     Ville_parent_1 = $Contact.customFields."Ville-parent-1"
-                    Téléphone_parent_1 = $Contact.customFields."Telephone-parent-1"
+                    Telephone_parent_1 = $Contact.customFields."Telephone-parent-1"
                     Email_parent_1 = $Contact.customFields."Email-parent-1"
-                    Civilité_parent_2 = $Contact.customFields."Civilite-parent-2"
-                    Prénom_parent_2 = $Contact.customFields."Prenom-parent-2"
+                    Civilite_parent_2 = $Contact.customFields."Civilite-parent-2"
+                    Prenom_parent_2 = $Contact.customFields."Prenom-parent-2"
                     Nom_parent_2 = $Contact.customFields."Nom-Parent-2"
                     Adresse_parent_2 = $Contact.customFields."Adresse-parent-2_xgJm1VLyifhF"
-                    Complément_adresse_parent_2 = $Contact.customFields."Complement-d-adresse-parent-2"
+                    Complement_adresse_parent_2 = $Contact.customFields."Complement-d-adresse-parent-2"
                     Code_postal_parent_2 = $Contact.customFields."Code-postal-parent-2"
                     Ville_parent_2 = $Contact.customFields."Ville-parent-2"
-                    Téléphone_parent_2 = $Contact.customFields."Telephone-parent-2"
+                    Telephone_parent_2 = $Contact.customFields."Telephone-parent-2"
                     Email_parent_2 = $Contact.customFields."Email-parent-2"
                     
                     # National uniquement (champs réservés à l'équipe salariés)
-                    DT_Adm_Numérique_Sécurité_Communication = $Contact.customFields."DT-Administrateur-informatique"
+                    DT_Adm_Numerique_Sécurité_Communication = $Contact.customFields."DT-Administrateur-informatique"
                     Compte_technique = $Contact.customFields."Compte-technique"
                 }
                 $NouvelleLignePP | Export-Csv `
@@ -259,7 +277,9 @@ function Get-contacts {
                     -NoTypeInformation `
                     -Delimiter ";" `
                     -Force `
-                    -Append
+                    -Append `
+                    -Encoding utf8
+
                 $NbContactsPP++
             }
             # Write-host $Contact.type
@@ -275,16 +295,16 @@ function Get-contacts {
                     TelMobile = $Contact.mobilePhone
                     Code_Postal = $Contact.postalAddress.postal
                     Ville = $Contact.postalAddress.city
-                    Région = $Contact.postalAddress.administrativeArea1
-                    Département = $Contact.postalAddress.administrativeArea2
+                    Region = $Contact.postalAddress.administrativeArea1
+                    Departement = $Contact.postalAddress.administrativeArea2
                     Pays = $Contact.postalAddress.country
                     Adresse_Atelier_Principal = $Contact.customFields."Adresse-atelier-principal"
                     Adresse_Atelier_Secondaire = $Contact.customFields."Adresse-atelier-secondaire"
                     Surface = $Contact.customFields."Surface-des-ateliers-en-M2"
                     Valeur_locative = $Contact.customFields."Valeur-des-biens-en-euros"
                     Nombre_de_jeunes = $Contact.customFields."Nombre-de-jeunes-au-31-juillet-2026"
-                    Nombre_de_bénévoles = $Contact.customFields."Nombre-de-benevoles-au-31-juillet-2026"
-                    DateDeCréation = $Contact.createdAt
+                    Nombre_de_benevoles = $Contact.customFields."Nombre-de-benevoles-au-31-juillet-2026"
+                    DateDeCreation = $Contact.createdAt
                     DateDeModification = $Contact.updatedAt
                     ListeDesMembres = $($Contact.contactIrisOfPeopleBelongingToStructure)
                 }
@@ -297,6 +317,7 @@ function Get-contacts {
                     -Append
                 $NbContactsPM++
             }
+            $NumLigne++
         }
          if ($Response.'hydra:member') {
                 $Items = $Response.'hydra:member'
@@ -379,7 +400,7 @@ if (Test-Path "$RepOutput\$Endpoint.json") {
     Write-Log "Le fichier '$RepOutput\$Endpoint.json' n'existe pas. Aucun renommage nécessaire." -Level INFO
 }
 
-$Results = Get-contacts -baseUrl $BaseUrl -Endpoint "contacts" -ItemsPerPage 100 -NbContactsPP 0 -NbContactsPM 0
+$Results = Get-contacts -baseUrl $BaseUrl -Endpoint "contacts" -ItemsPerPage $ItemsPerPage -NbContactsPP 0 -NbContactsPM 0
 Write-Log "Nbre de contacts PP : $($Results[1])"
 Write-Log "Nbre de contacts PM : $($Results[2])"
 
