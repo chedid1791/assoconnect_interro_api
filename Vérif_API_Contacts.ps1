@@ -14,7 +14,7 @@ $ParamFile = "Params.psd1"
 $Endpoint = "contacts"
 
 # Nombre d'éléments par page
-$ItemsPerPage = 100
+$ItemsPerPage = 25
 
 #==========================================
 # Charger les paramètres
@@ -54,7 +54,7 @@ function Get-contacts {
     $NombreDeContactsDansLaBase = 0
     $NbreDeContactsRecuperes = 0
 
-    $Page = 134
+    $Page = 1
     $HasMoreData = $true
 
     while ($HasMoreData) {
@@ -75,9 +75,7 @@ function Get-contacts {
         }
         catch {
             Write-Host "Erreur lors de la lecture de la page $Page : $($_.Exception.Message)" -ForegroundColor Red
-            $ListeContactsdelaPage = @()
-            $ListeContactsdelaPage = $response.'hydra:member'
-            $ListeContactsdelaPage | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
+            $ListedesContactsRecuperes | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
             exit 1
         }
         $NombreDeContactsDansLaBase = $Response.'hydra:totalItems'
