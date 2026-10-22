@@ -19,7 +19,7 @@ $Endpoint = "contacts"
 $ListeGroupesAvances= "groups_avances.csv"
 
 # Nombre d'éléments par page
-$ItemsPerPage = 25
+$ItemsPerPage = 100
 
 # ==========================================
 # Fonction log
@@ -121,14 +121,11 @@ function Get-contacts {
         Write-Log "Recherche des contacts page : $page"
 
         try {
-            $Response = Invoke-RestMethod `
-                -Uri $Url  `
-                -Method GET `
-                -Headers $Headers
-                
+            $Response = Invoke-WebRequest -Uri $Url -Headers $Headers -UseBasicParsing
+            $Datas = [System.Text.Encoding]::UTF8.GetString($Response.RawContentStream.ToArray()) | ConvertFrom-Json
 
-            If ($Response.'hydra:totalItems') {
-                $TotalItem = $response.'hydra:totalItems'
+            If ($Datas.'hydra:totalItems') {
+                $TotalItem = $Datas.'hydra:totalItems'
                 write-Log "Nombre de contacts dans la base assoconnect : $TotalItem" -Level INFO
                 # write-host "Nombre de contacts dans la base assoconnect : $TotalItem"
             }
@@ -137,7 +134,7 @@ function Get-contacts {
             Write-Log "Erreur lors de la lecture de la page $Page : $($_.Exception.Message)" -Level ERROR
             exit 1
         }
-        Foreach ($Contact in $Response.'hydra:member') {
+        Foreach ($Contact in $Datas.'hydra:member') {
         # write-host "-------------------------------------------------------------" -ForegroundColor Yellow 
         # write-host "Contact : $($Contact.firstname) $($Contact.lastname) - Type : $($Contact.Type) - Id : $($Contact.'@id')" -ForegroundColor Green
         # Write-host "ligne : $NumLigne - Page : $Page - Total contacts : $TotalItem" -ForegroundColor Green
@@ -319,8 +316,8 @@ function Get-contacts {
             }
             $NumLigne++
         }
-         if ($Response.'hydra:member') {
-                $Items = $Response.'hydra:member'
+         if ($Datas.'hydra:member') {
+                $Items = $Datas.'hydra:member'
                 $AllResults += $Items
 
                 $ItemsTotaux = $Itemstotaux +$Items.Count

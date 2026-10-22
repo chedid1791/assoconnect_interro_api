@@ -14,7 +14,7 @@ $ParamFile = "Params.psd1"
 $Endpoint = "contacts"
 
 # Nombre d'éléments par page
-$ItemsPerPage = 25
+$ItemsPerPage = 100
 
 #==========================================
 # Charger les paramètres
@@ -48,7 +48,6 @@ function Get-contacts {
         [string]$Endpoint, 
         [int]$ItemsPerPage)
     
-    $ListeContactsdelaPage = @()
     $ListedesContactsRecuperes = @()
 
     $NombreDeContactsDansLaBase = 0
@@ -59,7 +58,6 @@ function Get-contacts {
 
     while ($HasMoreData) {
 
-        $ListeContactsdelaPage = @()
 
         $Url = "$BaseUrl/organizations/$($config.Organisation)/$Endpoint"+"?page=$Page&itemsPerPage=$ItemsPerPage"
 
@@ -68,21 +66,20 @@ function Get-contacts {
         $response = $null
 
         try {
-            $Response = Invoke-RestMethod `
-                -Uri $Url  `
-                -Method GET `
-                -Headers $Headers
+            $Response = Invoke-WebRequest -Uri $Url -Headers $Headers -UseBasicParsing
+            $Data = [System.Text.Encoding]::UTF8.GetString($Response.RawContentStream.ToArray()) | ConvertFrom-Json
         }
         catch {
             Write-Host "Erreur lors de la lecture de la page $Page : $($_.Exception.Message)" -ForegroundColor Red
             $ListedesContactsRecuperes | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\$Endpoint.json" -Encoding UTF8
             exit 1
         }
-        $NombreDeContactsDansLaBase = $Response.'hydra:totalItems'
+
+        $NombreDeContactsDansLaBase = $Data.'hydra:totalItems'
         Write-Host "Nombre de contacts dans la base assoconnect : $NombreDeContactsDansLaBase" -ForegroundColor Green
 
-        If ($Response.'hydra:member') {
-            $ListeDesContactsdelaPage  = $Response.'hydra:member'
+        If ($Data.'hydra:member') {
+            $ListeDesContactsdelaPage  = $Data.'hydra:member'
             $ListeDesContactsRecuperes += $ListeDesContactsdelaPage
 
             $NbreDeContactsRecuperes = $NbreDeContactsRecuperes + $ListeDesContactsdelaPage.Count
