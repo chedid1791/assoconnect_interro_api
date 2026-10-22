@@ -275,7 +275,7 @@ function Get-contacts {
                     -Delimiter ";" `
                     -Force `
                     -Append `
-                    -Encoding utf8
+                    -Encoding UTF8
 
                 $NbContactsPP++
             }
@@ -311,7 +311,9 @@ function Get-contacts {
                     -NoTypeInformation `
                     -Encoding UTF8 `
                     -Delimiter ";" `
+                    -Force `
                     -Append
+                    
                 $NbContactsPM++
             }
             $NumLigne++
