@@ -127,54 +127,54 @@ If (test-Path $RepInput\$ListeARD) {
 
     $Urlcomplete = $Url
     try {
-            $Response = Invoke-RestMethod `
-                -Uri $Urlcomplete `
-                -Method GET `
-                -Headers $Headers
-
-            If ($Response.'hydra:totalItems') {
-                $TotalItem = $response.'hydra:totalItems'
-                write-Log "Nombre total d'éléments : $TotalItem" -Level INFO
-            }
+        #$Response = Invoke-RestMethod -Uri $Urlcomplete -Method GET -Headers $Headers
+         $Response = Invoke-WebRequest -Uri $Url -Headers $Headers -UseBasicParsing
+         $Datas = [System.Text.Encoding]::UTF8.GetString($Response.RawContentStream.ToArray()) | ConvertFrom-Json
     }
     catch {
         Write-Log "Erreur lors de l'appel à l'API : $($_.Exception.Message)" -Level ERROR
         Exit 1
     }
+    If ($Datas.'hydra:totalItems') {
+        $TotalItem = $Datas.'hydra:totalItems'
+        #write-Log "Nombre total d'éléments : $TotalItem" -Level INFO
+    }
 
     while ($HasMoreData) {
         $Urlcomplete = "$Url"+"?page=$Page&itemsPerPage=$ItemsPerPage"
         Write-Host "Lecture page $Page ..." -ForegroundColor Cyan
+        
         try {
-            $Response = Invoke-RestMethod `
-                -Uri $Urlcomplete `
-                -Method GET `
-                -Headers $Headers
- 
-            Foreach($Association in $Response.'hydra:member') {
-                If ($Association.type -eq $Type){
-                    If($association.'id' -notin $IndexDT.Keys) {
-                        $urlAssocloc = "$baseUrl/organizations/$($Association.'id')/address"
-                        Try {
-                            $ResponseAssocloc = Invoke-RestMethod `
-                                -Uri $urlAssocloc `
-                                -Method GET `
-                                -Headers $Headers
-                            $Departement = $ResponseAssocloc.'administrativeArea2'
-                            $Région = $ResponseAssocloc.'administrativeArea1'
-                            $CodePostal = $ResponseAssocloc.'Postal'
-                            $TypeGA = ""
-                            If($association.'id' -in $IndexARD.Keys) {
-                                $TypeGA = "ARD"
-                            }else {
-                                $TypeGA = "LOC"
-                            }
-                        }
-                        Catch {
-                            Write-Log "Erreur lors de l'appel à l'API pour l'adresse de l'association $($Association.'id') : $($_.Exception.Message)" -Level ERROR
-                            Exit 1
-                        }
-                        $AssociationLocale = [PSCustomObject]@{
+            #$Response = Invoke-RestMethod -Uri $Urlcomplete -Method GET -Headers $Headers
+            $Response = Invoke-WebRequest -Uri $Urlcomplete -Headers $Headers -UseBasicParsing
+            $Datas = [System.Text.Encoding]::UTF8.GetString($Response.RawContentStream.ToArray()) | ConvertFrom-Json
+        }
+        catch {
+            Write-Log "Erreur lors de l'appel à l'API : $($_.Exception.Message)" -Level ERROR
+            Exit 1
+        }
+
+        Foreach($Association in $Datas.'hydra:member') {
+            If ($Association.type -eq $Type){
+                If($association.'id' -notin $IndexDT.Keys) {
+                    $urlAssocloc = "$baseUrl/organizations/$($Association.'id')/address"
+                    Try {
+                        $ResponseAssocloc = Invoke-WebRequest -Uri $urlAssocloc -Headers $Headers -UseBasicParsing
+                        $DatasAssocloc = [System.Text.Encoding]::UTF8.GetString($ResponseAssocloc.RawContentStream.ToArray()) | ConvertFrom-Json
+                    } catch {
+                        Write-Log "Erreur lors de l'appel à l'API pour l'adresse de l'association $($Association.'id') : $($_.Exception.Message)" -Level ERROR
+                    }
+                    $Departement = $DatasAssocloc.'administrativeArea2'
+                    $Région = $DatasAssocloc.'administrativeArea1'
+                    $CodePostal = $DatasAssocloc.'Postal'
+                    $TypeGA = ""
+
+                    If($association.'id' -in $IndexARD.Keys) {
+                        $TypeGA = "ARD"
+                    }else {
+                        $TypeGA = "LOC"
+                    }
+                    $AssociationLocale = [PSCustomObject]@{
                         Id = $Association.'id'
                         Nom = $Association.'name'
                         Type = $Association.'type'
@@ -185,26 +185,19 @@ If (test-Path $RepInput\$ListeARD) {
                         UID = $CodePostal + "_" + $Association.'name'.Substring($Association.'name'.Length - 10)
                     }
                     $AllResults += $AssociationLocale
-
-                    } else {
-                        write-log "Le groupe avancé avec l'ID $($Association.'id') est exclu car il est présent dans la liste DT." -Level WARNING
-                        # write-log "Le groupe avancé $($Association.'name') est exclu." -level
-                    }
+                } else {
+                    write-log "Le groupe avancé avec l'ID $($Association.'id') est déjà présent dans la liste des groupes avancés DT. Il sera ignoré." -Level WARNING
                 }
             }
-            $Nb_Associations_parcourues = $Nb_Associations_parcourues + $Response.'hydra:member'.Count
+        }
+            $Nb_Associations_parcourues = $Nb_Associations_parcourues + $Datas.'hydra:member'.Count 
 
             if ($Nb_Associations_parcourues -eq $TotalItem) {
-                    $HasMoreData = $false
-                }
-                else {
-                    $Page++
-                }
-        }
-        catch {
-            Write-Log "Erreur lors de l'appel à l'API : $($_.Exception.Message)" -Level ERROR
-            Exit 1
-        }
+                $HasMoreData = $false
+            }
+            else {
+                $Page++
+            }
     }
     Return $AllResults
 }
@@ -212,11 +205,12 @@ If (test-Path $RepInput\$ListeARD) {
 # Fin de déclaration des fonctions
 # ==========================================
 
-
 # ==========================================
 # Main script
 # ==========================================
-write-Log "Début du script" -Level INFO
+$heureActuelle = Get-Date -Format "HH:mm:ss"
+write-Log "Début du script à $heureActuelle"
+
 
 if (Test-Path "$RepOutput\Groups_avances.csv") {
     # $Dossier = Split-Path "$RepOutput\Groups_avances.csv"
@@ -261,6 +255,6 @@ $Results | Export-Csv -Path "$RepOutput\Groups_avances.csv" -NoTypeInformation -
 
 $Results | ConvertTo-Json -Depth 20 | Out-File "$RepOutput\Groups_avances.json" -Encoding UTF8
 
-Write-Log "Fin du script"
+$heureActuelle = Get-Date -Format "HH:mm:ss"
+Write-Log "Fin du script à $heureActuelle"
 Write-Host "Fin du script. Les résultats ont été exportés vers '$RepOutput\Groups_avances.csv' et '$RepOutput\Groups_avances.json'." -ForegroundColor Green
-

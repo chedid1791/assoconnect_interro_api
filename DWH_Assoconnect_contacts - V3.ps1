@@ -102,6 +102,7 @@ function Get-contacts {
         write-Log "Le fichier '$RepOutput\$ListegroupesAvances' est chargé." -Level SUCCESS
     } else {
         Write-Log "Le fichier '$RepOutput\$ListegroupesAvances' est introuvable." -Level ERROR
+        write-host "Le fichier '$RepOutput\$ListegroupesAvances' est introuvable." -ForegroundColor Red
         Exit 1
     }
     $IndexGroupeAvances = @{}
@@ -218,7 +219,8 @@ function Get-contacts {
                     Departement = $Contact.postalAddress.administrativeArea2
                     Pays = $Contact.postalAddress.country
                     Adresse_complete = $Contact.postalAddress.formattedAddress
-                    Date_Naissance = $Contact.dateOfBirth
+                    Date_Naissance = [datetime]::ParseExact($Contact.dateOfBirth,"yyyy-MM-dd",[System.Globalization.CultureInfo]::InvariantCulture)
+                    #Date_Naissance = $Contact.dateOfBirth
                     GA_Nom_ARD = $GA_Nom_ARD
                     GA_Departement_ARD = $GA_Departement_ARD
                     GA_Region_ARD = $GA_Region_ARD
